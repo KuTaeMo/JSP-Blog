@@ -7,6 +7,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>로그인 폼 페이지</h1>
+<h1>인덱스 페이지입니다.</h1>
+</body>
+</html> 
 
-<%@ include file="../layout/header.jsp" %>
+<%
+	response.sendRedirect("board/list.jsp");    
+%> 
