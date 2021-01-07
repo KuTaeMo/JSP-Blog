@@ -26,7 +26,10 @@ public class BoardController extends HttpServlet {
 	}
 	
 	protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		String cmd = request.getParameter("cmd");
+		if(cmd.equals("saveForm")) {
+			response.sendRedirect("board/saveForm.jsp");
+		}
 	}
 
 }
