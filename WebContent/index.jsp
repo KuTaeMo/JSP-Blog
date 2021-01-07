@@ -12,6 +12,6 @@
 </html>
 
 <%
-	RequestDispatcher dis = request.getRequestDispatcher("board?cmd=list");
+	RequestDispatcher dis = request.getRequestDispatcher("board?cmd=list&page=0");
 	dis.forward(request, response);
 %>

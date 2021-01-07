@@ -61,16 +61,20 @@ public class BoardController extends HttpServlet {
 			dto.setContent(content);
 			int result = boardService.글쓰기(dto);
 			if(result == 1) { //정상
-				RequestDispatcher dis = request.getRequestDispatcher("board/index.jsp");
+				RequestDispatcher dis = request.getRequestDispatcher("index.jsp");
 				dis.forward(request, response);
 			}else {
 				Script.back(response, "글쓰기실패");
 			}
 		}else if (cmd.equals("list")) {
-			List<Board> boards = boardService.글목록보기();
+			int page=Integer.parseInt(request.getParameter("page"));
+			List<Board> boards = boardService.글목록보기(page);
 			request.setAttribute("boards", boards);
+			
 			RequestDispatcher dis = request.getRequestDispatcher("board/list.jsp");
 			dis.forward(request, response);
+		}else if(cmd.equals("detail")) {
+			
 		}
 	}
 
