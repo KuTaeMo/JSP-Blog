@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,10 +7,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>인덱스 페이지입니다.</h1>
+	<h1>인덱스 페이지입니다.</h1>
 </body>
-</html> 
+</html>
 
 <%
-	response.sendRedirect("/blog/board/list.jsp");    
-%> 
+	RequestDispatcher dis = request.getRequestDispatcher("board?cmd=list");
+	dis.forward(request, response);
+%>
