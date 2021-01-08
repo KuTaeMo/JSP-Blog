@@ -22,35 +22,36 @@ import com.cos.blog.util.Script;
 public class BoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	
-	
-    public BoardController() {
-        super();
-    }
+	public BoardController() {
+		super();
+	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doProcess(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doProcess(request, response);
 	}
-	
-	protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doProcess(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		String cmd = request.getParameter("cmd");
-		BoardService boardService=new BoardService();
-		//http://localhost:8000/blog/board?comd=saveForm
+		BoardService boardService = new BoardService();
+		// http://localhost:8000/blog/board?comd=saveForm
 		HttpSession session = request.getSession();
-		if(cmd.equals("saveForm")) {
+		if (cmd.equals("saveForm")) {
 			User principal = (User) session.getAttribute("principal");
-			if(principal != null) {
+			if (principal != null) {
 				RequestDispatcher dis = request.getRequestDispatcher("board/saveForm.jsp");
 				dis.forward(request, response);
-			}else {
+			} else {
 				RequestDispatcher dis = request.getRequestDispatcher("user/loginForm.jsp");
 				dis.forward(request, response);
-			}	
-		}else if(cmd.equals("save")) {
+			}
+		} else if (cmd.equals("save")) {
 			int userId = Integer.parseInt(request.getParameter("userId"));
 			String title = request.getParameter("title");
 			String content = request.getParameter("content");
@@ -60,21 +61,32 @@ public class BoardController extends HttpServlet {
 			dto.setTitle(title);
 			dto.setContent(content);
 			int result = boardService.글쓰기(dto);
-			if(result == 1) { //정상
+			if (result == 1) { // 정상
 				RequestDispatcher dis = request.getRequestDispatcher("index.jsp");
 				dis.forward(request, response);
-			}else {
+			} else {
 				Script.back(response, "글쓰기실패");
 			}
-		}else if (cmd.equals("list")) {
-			int page=Integer.parseInt(request.getParameter("page"));
+		} else if (cmd.equals("list")) {
+			int page = Integer.parseInt(request.getParameter("page"));
 			List<Board> boards = boardService.글목록보기(page);
+
+			// 계산 (전체 데이터수랑 한페이지몇개 - 총 몇페이지 나와야되는 계산) 3page라면 page의 맥스값은 2
+			// page == 2가 되는 순간 isEnd = true
+			// request.setAttribute("isEnd", true);
+			int boardCount = boardService.글개수();
+			int lastPage = (boardCount - 1) / 4; // 2/4 = 0, 3/4 = 0, 4/4 = 1, 9/4 = 2 ( 0page, 1page, 2page)
+			double currentPosition = (double) page / (lastPage) * 100;
+
+			request.setAttribute("lastPage", lastPage);
+			request.setAttribute("currentPosition", currentPosition);
+
 			request.setAttribute("boards", boards);
-			
+
 			RequestDispatcher dis = request.getRequestDispatcher("board/list.jsp");
 			dis.forward(request, response);
-		}else if(cmd.equals("detail")) {
-			
+		} else if (cmd.equals("detail")) {
+
 		}
 	}
 
