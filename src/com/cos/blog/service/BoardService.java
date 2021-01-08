@@ -1,7 +1,11 @@
 package com.cos.blog.service;
 
+import java.io.PrintWriter;
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
+
+import com.cos.blog.anno.RequestMapping;
 import com.cos.blog.domain.board.Board;
 import com.cos.blog.domain.board.BoardDao;
 import com.cos.blog.domain.board.dto.DetailRespDto;
@@ -26,6 +30,11 @@ public class BoardService {
 	}
 	public DetailRespDto 글상세보기(int id) {
 		// 조회수 업데이트치기
-		return boardDao.findById(id);
+		int result = boardDao.updateReadCount(id);
+		if(result == 1) {
+			return boardDao.findById(id);
+		}else {
+			return null;
+		}
 	}
 }

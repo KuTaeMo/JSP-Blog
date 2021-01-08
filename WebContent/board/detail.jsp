@@ -4,6 +4,9 @@
 <%@ include file="../layout/header.jsp" %>
 
 <div class="container">
+
+	<button class="btn btn-danger" onClick="deleteById(${dto.id})">삭제</button>
+	
 	<br />
 	<br />
 	<h6 class="m-2">
@@ -61,6 +64,18 @@
 	</div>
 	<!-- 댓글 박스 끝 -->
 </div>
-
+<script>
+	function deleteById(id){
+		// ajax로 delete 요청 (Mehtod : POST)
+		$.ajax({
+			type:"DELETE",
+			url:"http://localhost:8000/blog/board?cmd=deleteById&id="+dto.id
+			}).done(function(result){
+			if(result=="ok"){
+				location.href="index.jsp";
+			}
+		})
+	}
+</script>
 </body>
 </html>
